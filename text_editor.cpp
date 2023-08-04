@@ -1,14 +1,11 @@
-//Blin Qipa 2019 - Yeditepe University
-#include <iostream>
-#include <string>
+// #include <iostream>
+// #include <string>
+#include<bits/stdc++.h>
 #include <fstream>
-#include <stack>
-#include <thread>
-#include <chrono>
+// #include <stack>
+// #include <thread>
+// #include <chrono>
 using namespace std;
-using namespace std::this_thread;
-using namespace std::chrono;
-
 struct undoCmd{
 	int lineNumber;
 	string text;
@@ -29,7 +26,7 @@ private:
 	node *tail;
 	int numOfLines = 0;
 	int next = 1;
-	stack<undoCmd> undoStack;
+	stack<undoCmd> undoStack; //supreme stack
 public:
 	std::ofstream outfile;
 	linked_list(){
@@ -51,7 +48,7 @@ public:
 				cout<<"Enter line you want the text to be placed into : ";
 				cin >> lineGiven;
 				cout<<"Enter text : ";
-				cin.ignore(1);
+				cin.ignore(1); //ignores the /n character (it was the first character)
 				getline(cin,dataGiven);
 				dataGiven+="\n";
 				if (lineGiven == 1)
@@ -217,66 +214,16 @@ public:
 			node *temp;
 			temp = new node;
 			temp->data = dataGiven;
-			temp->next = NULL;
+			// temp->next = NULL;
 			temp->next = head;
 			head = temp;
 			numOfLines++;
 		}
-		undoCmd adddedToHead;
+		undoCmd adddedToHead; //a structure
 		adddedToHead.lineNumber = 1;
 		adddedToHead.commandNumber = 1;
 		undoStack.push(adddedToHead);
-	}
-
-	void whateverAddToTail(string dataGiven){		//an extra function used to add to tail, had to implement to make Undo function work, ignore this one please
-		if (head == NULL)					//no node, empty linked list
-		{
-			node *temp;
-			temp = new node;
-			temp->data = dataGiven;
-			temp->next = NULL;
-			head = temp;
-			tail = head;
-			numOfLines++;
-		}
-		else 								//one or more than one node
-		{
-			node *temp;
-			temp = new node;
-			temp->data = dataGiven;
-			temp->next = NULL;
-			tail->next = temp;
-			tail = temp;
-			numOfLines++;
-		}
-	}
-
-	void whateverDeleteTail(){						//an extra function used to delete from tail, had to implement to make Undo function work,ignore this one please
-		node *temp = head;
-		if (head == NULL)
-		{
-			cout<<"Nothing to be deleted."<<endl;
-		}
-		else if (head == tail)
-		{
-			temp = head;
-			string backup = temp->data;
-			delete(temp);
-			head = NULL;
-			tail = NULL;
-			numOfLines--;
-		}
-		else
-		{
-			while (temp->next != NULL && temp->next->next != NULL)
-			{
-				temp = temp->next;
-			}
-			tail = temp;
-			delete temp->next;
-			temp->next = NULL;
-			numOfLines--;
-		}
+        //no need of nline and mline in this case
 	}
 
 	void addToTail(string dataGiven){		//this function will add to Tail
@@ -362,38 +309,38 @@ public:
 	void insertTextInBetween(string dataGiven, int lineGiven){		//this function will insert text in the given line, and will push all the other lines
 		if (lineGiven == 0)
 		{
-			cout<<"There's no line 0, did you mean 1 (cough...Google suggestions...cough)"<<endl;
+			cout<<"There's no line 0, did you mean 1?"<<endl;
 		}
-		else if (lineGiven == 1)
-		{
-			if (head == NULL)					//no node, empty linked list
-			{
-				node *temp;
-				temp = new node;
-				temp->data = dataGiven;
-				temp->next = NULL;
-				head = temp;
-				tail = head;
-				numOfLines++;
-			}
-			else 								//one or more than one node
-			{
-				node *temp;
-				temp = new node;
-				temp->data = dataGiven;
-				temp->next = NULL;
-				temp->next = head;
-				head = temp;
-				numOfLines++;
-			}
-			//May be unnecessary, dunno
-			undoCmd insertedToHead;
-			insertedToHead.lineNumber = 1;
-			insertedToHead.commandNumber = 5;
-			undoStack.push(insertedToHead);
-			// addToHead(dataGiven);
-			// numOfLines++;
-		}
+		// else if (lineGiven == 1)
+		// {
+		// 	if (head == NULL)					//no node, empty linked list
+		// 	{
+		// 		node *temp;
+		// 		temp = new node;
+		// 		temp->data = dataGiven;
+		// 		temp->next = NULL;
+		// 		head = temp;
+		// 		tail = head;
+		// 		numOfLines++;
+		// 	}
+		// 	else 								//one or more than one node
+		// 	{
+		// 		node *temp;
+		// 		temp = new node;
+		// 		temp->data = dataGiven;
+		// 		temp->next = NULL;
+		// 		temp->next = head;
+		// 		head = temp;
+		// 		numOfLines++;
+		// 	}
+		// 	//May be unnecessary, dunno
+		// 	undoCmd insertedToHead;
+		// 	insertedToHead.lineNumber = 1;
+		// 	insertedToHead.commandNumber = 5;
+		// 	undoStack.push(insertedToHead);
+		// 	// addToHead(dataGiven);
+		// 	// numOfLines++;
+		// }
 		else{
 			node *prevNode = head;
 			node *nextNode = head;
@@ -449,7 +396,7 @@ public:
 	void deleteLine(int lineGiven){							//this function should delete anything in the given line, also decreases the numOfLines
 		if (head == NULL)
 		{
-			cout<<"There is no line to be deleted/removed."<<endl;
+			cout<<"There is no line to delete."<<endl;
 		}
 		else if(head == tail){
 			node *temp = head;
@@ -459,7 +406,7 @@ public:
 			numOfLines--;
 		}
 		else if(lineGiven == 0){
-			cout<<"There's no line 0, did you mean 1 (cough...Google suggestions...cough)"<<endl;
+			cout<<"There's no line 0, did you mean 1?"<<endl;
 		}
 		else if(lineGiven == 1){
 			string backup = head->data;
@@ -525,25 +472,25 @@ public:
 
 	void insertFurtherAway(string dataGiven, int lineGiven){		//will print /n lines if given line is larger than numOfLines
 		undoCmd insertedFurtherAway;
-		insertedFurtherAway.lineNumber = 0;
+		insertedFurtherAway.lineNumber = lineGiven;
 		insertedFurtherAway.commandNumber = 9;
 		if (head == NULL)
 		{
 			while(numOfLines < lineGiven-1)
 			{
-				whateverAddToTail("\n");
+				AddToTail("\n");
 				insertedFurtherAway.lineNumber++;
 			}
 			// insertedFurtherAway.lineNumber++;
-			whateverAddToTail(dataGiven);
+			AddToTail(dataGiven);
 		}
 		else{
 			while(numOfLines < lineGiven-1)
 			{
-				whateverAddToTail("\n");
+				AddToTail("\n");
 				insertedFurtherAway.lineNumber++;
 			}
-			whateverAddToTail(dataGiven);
+			AddToTail(dataGiven);
 		}
 		undoStack.push(insertedFurtherAway);
 	}
@@ -607,7 +554,7 @@ public:
 		}
 		else if (pageGiven * 10 > numOfLines)
 		{
-			cout<<"WHOOSH, you want to print an inexisting page, collect yourself!"<<endl;
+			cout<<"This page has not been written:("<<endl;
 		}
 	}
 
@@ -636,7 +583,7 @@ public:
 		}
 		else if (temp.commandNumber == 2)
 		{
-			cout<<"Moved M to N, moving N to M"<<endl;
+			cout<<"Moved M to N, moving N to M.."<<endl;
 			moveNtoM(temp.mLine, temp.nLine);
 			undoStack.pop();
 		}
